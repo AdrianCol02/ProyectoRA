@@ -1,44 +1,70 @@
-var express = require('express');
-var router = express.Router();
-var fs = require('fs');
+from flask import Flask, jsonify, request
+from products import products
 
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Data-Logger' });
-});
+app = Flask (__name__)
 
-router.get('/record', function(req, res, next) {
-	var now = new Date();
-var logfile_name = __dirname+'/../public/logs/' +req.query.id_nodo+ "-"+ now.getFullYear() + "-"+ now.getMonth() + "-" + now.getDate() +'.csv'
+@app.route("/ping")
+def ping():
+    return jsonify({"message": "HOLA!"})
 
-fs.stat(logfile_name, function(err, stat) {
-    if(err == null) {
-        console.log('File %s exists', logfile_name);
-		let content = req.query.id_nodo+';'+now.getTime()+";"+req.query.temperatura+";"+req.query.humedad+";"+req.query.co2+";"+req.query.volatiles+"\r\n";
-		append2file(logfile_name, content);
-		
-    } else if(err.code === 'ENOENT') {
-        // file does not exist
-	let content ='id_nodo; timestamp; temperatura; humedad; CO2; volatiles\r\n'+req.query.id_nodo+';'+now.getTime()+";"+req.query.temperatura+";"+req.query.humedad+";"+req.query.co2+";"+req.query.volatiles+"\r\n";
-       append2file(logfile_name, content);
-    } else {
-        console.log('Some other error: ', err.code);
+@app.route(methods=['GET'])
+def addDatoGet():
+    return jsonify({"products": products, "message": "product’s list"})
+
+
+@app.route ('/products', methods=['POST'])
+def addDatoPost():
+    new_product = {
+        "name" : request.json['name'],
+        "price": request.json['price'],
+        "quantity": request.json['quantity']
     }
-});
+    products.append(new_product)
+    print (request.json)
+    return jsonify ({"message": "Product Added Succesfully", "products": products})
+
+"""
+@app.route('/products/<string:product_name>', methods=['PUT'])
+def addProductFichero():
+    new_product = {
+        "name": request.json['name'],
+        "price": request.json['price'],
+        "quantity": request.json['quantity']
+    }
+    products.append(new_product)
+    print(request.json)
+    with open('products2.py', 'w') as file:
+        file.write(str(new_product))
+
+    return jsonify({"message": "Product Added Succesfully", "products": products})
 
 
 
+@app.route('/products/<string:product_name>', methods=['PUT'])
+def editProduct(product_name):
+    productFound = [product for product in products if product ['name'] == product_name]
+    if (len(productFound) > 0):
+        productFound[0]['name'] = request.json['name']
+        productFound[0]['price'] = request.json['price']
+        productFound[0]['quantity'] = request.json['quantity']
+        return jsonify ({
+            "message": "Product Updated",
+            "product": productFound[0]
+        })
+    return jsonify({"message": "Product Not Found"})
 
-  //res.render('index', { title: 'Express' });
-  res.send("Saving: "+req.query.id_nodo+';'+now.getTime()+";"+req.query.temperatura+";"+req.query.humedad+";"+req.query.co2+";"+req.query.volatiles+" in: "+logfile_name);
-});
 
-function append2file (file2append, content){
-	fs.appendFile(file2append, content, function (err) {
-    if (err) throw err;
-    console.log("Saving: "+content+" in: "+file2append);
-});
-}
+@app.route('/products/<string:product_name>', methods=['DELETE'])
+def deleteProduct(product_name):
+    productsFound =[product for product in products if product['name'] == product_name]
+    if (len(productsFound)> 0):
+        products.remove(productsFound[0])
+        return jsonify ({
+            "message": "Product Deleted",
+            "products": products
+        })
+    return jsonify ({"message": "Product Not found"})
+"""
 
-module.exports = router;
+app.run (debug=True, port=4000)
