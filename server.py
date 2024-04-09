@@ -1,5 +1,14 @@
 from flask import Flask, jsonify, request
 import os from datetime import datetime
+import paho.mqtt.client as mqtt
+
+# Configuración de MQTT
+MQTT_BROKER_HOST = 'localhost'  # Cambia esto por la dirección del broker MQTT
+MQTT_BROKER_PORT = 1883         # Puerto por defecto de MQTT
+
+# Conexión al broker MQTT
+mqtt_client = mqtt.Client()
+mqtt_client.connect(MQTT_BROKER_HOST, MQTT_BROKER_PORT)
 
 app = Flask (__name__)
 
