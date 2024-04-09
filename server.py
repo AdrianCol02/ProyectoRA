@@ -1,28 +1,61 @@
 from flask import Flask, jsonify, request
-from products import products
 
 
 app = Flask (__name__)
+
 
 @app.route("/ping")
 def ping():
     return jsonify({"message": "HOLA!"})
 
-@app.route(methods=['GET'])
+
+@app.route('/get', methods=['GET'])
 def addDatoGet():
-    return jsonify({"products": products, "message": "product’s list"})
+    # Código para cuando llega un get
+    # return jsonify({"products": products, "message": "product’s list"})
+    return jsonify ({"message": "DatoGet recibido"})
 
 
-@app.route ('/products', methods=['POST'])
+@app.route ('/post', methods=['POST'])
 def addDatoPost():
-    new_product = {
+    # Código para cuando llega un post
+    new_dato = {
         "name" : request.json['name'],
         "price": request.json['price'],
         "quantity": request.json['quantity']
     }
-    products.append(new_product)
+    XXXXXXX.append(new_dato)
     print (request.json)
-    return jsonify ({"message": "Product Added Succesfully", "products": products})
+    return jsonify ({"message": "DatoPost recibido"})
+
+
+# Rutas para servir archivos estáticos y listarlos
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
+
+@app.route('/users')
+def users():
+    return app.send_static_file('users.html')
+
+@app.route('/logs')
+def logs():
+    return jsonify(os.listdir('public/logs'))
+
+# Para servir los archivos estáticos
+@app.route('/logs/<path:filename>')
+def serve_logs(filename):
+    return app.send_static_file(os.path.join('logs', filename))
+
+# Manejador para errores 404
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({'error': 'Not found'}), 404
+
+# Manejador para errores 500
+@app.errorhandler(500)
+def internal_server_error(error):
+    return jsonify({'error': 'Internal server error'}), 500
 
 """
 @app.route('/products/<string:product_name>', methods=['PUT'])
