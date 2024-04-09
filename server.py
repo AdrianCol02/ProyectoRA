@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-
+import os from datetime import datetime
 
 app = Flask (__name__)
 
@@ -11,23 +11,68 @@ def ping():
 
 @app.route('/get', methods=['GET'])
 def addDatoGet():
-    # Código para cuando llega un get
-    # return jsonify({"products": products, "message": "product’s list"})
+    # Obtener los parámetros de la URL
+    id_nodo = request.args.get('id_nodo')
+    temperatura = request.args.get('temperatura')
+    humedad = request.args.get('humedad')
+    co2 = request.args.get('co2')
+    volatiles = request.args.get('volatiles')
+
+    # Obtener la fecha y hora actual
+    now = datetime.now()
+
+    # Construir el nombre del archivo de registro
+    logfile_name = f"public/logs/{id_nodo}-{now.year}-{now.month}-{now.day}.csv"
+
+    # Comprobar si el archivo ya existe
+    if os.path.exists(logfile_name):
+        # Si el archivo existe, agregar la línea de datos
+        content = f"{id_nodo};{now.timestamp()};{temperatura};{humedad};{co2};{volatiles}\n"
+    else:
+        # Si el archivo no existe, agregar la línea de encabezado seguida de los datos
+        content = f"id_nodo;timestamp;temperatura;humedad;CO2;volatiles\n{id_nodo};{now.timestamp()};{temperatura};{humedad};{co2};{volatiles}\n"
+
+    # Agregar el contenido al archivo de registro
+    append_to_file(logfile_name, content)
+
+    # Devolver una respuesta indicando que los datos se han guardado
+    return f"Saving: {content} in: {logfile_name}"
     return jsonify ({"message": "DatoGet recibido"})
 
 
 @app.route ('/post', methods=['POST'])
 def addDatoPost():
-    # Código para cuando llega un post
-    new_dato = {
-        "name" : request.json['name'],
-        "price": request.json['price'],
-        "quantity": request.json['quantity']
-    }
-    XXXXXXX.append(new_dato)
-    print (request.json)
-    return jsonify ({"message": "DatoPost recibido"})
+    # Obtener los datos del formulario enviado por POST
+    id_nodo = request.form.get('id_nodo')
+    temperatura = request.form.get('temperatura')
+    humedad = request.form.get('humedad')
+    co2 = request.form.get('co2')
+    volatiles = request.form.get('volatiles')
 
+    # Obtener la fecha y hora actual
+    now = datetime.now()
+
+    # Construir el nombre del archivo de registro
+    logfile_name = f"public/logs/{id_nodo}-{now.year}-{now.month}-{now.day}.csv"
+
+    # Comprobar si el archivo ya existe
+    if os.path.exists(logfile_name):
+        # Si el archivo existe, agregar la línea de datos
+        content = f"{id_nodo};{now.timestamp()};{temperatura};{humedad};{co2};{volatiles}\n"
+    else:
+        # Si el archivo no existe, agregar la línea de encabezado seguida de los datos
+        content = f"id_nodo;timestamp;temperatura;humedad;CO2;volatiles\n{id_nodo};{now.timestamp()};{temperatura};{humedad};{co2};{volatiles}\n"
+
+    # Agregar el contenido al archivo de registro
+    append_to_file(logfile_name, content)
+
+    # Devolver una respuesta indicando que los datos se han guardado
+    return f"Saving: {content} in: {logfile_name}"
+
+# Función para agregar contenido a un archivo
+def append_to_file(file_to_append, content):
+    with open(file_to_append, 'a') as file:
+        file.write(content)
 
 # Rutas para servir archivos estáticos y listarlos
 @app.route('/')
@@ -56,48 +101,5 @@ def not_found(error):
 @app.errorhandler(500)
 def internal_server_error(error):
     return jsonify({'error': 'Internal server error'}), 500
-
-"""
-@app.route('/products/<string:product_name>', methods=['PUT'])
-def addProductFichero():
-    new_product = {
-        "name": request.json['name'],
-        "price": request.json['price'],
-        "quantity": request.json['quantity']
-    }
-    products.append(new_product)
-    print(request.json)
-    with open('products2.py', 'w') as file:
-        file.write(str(new_product))
-
-    return jsonify({"message": "Product Added Succesfully", "products": products})
-
-
-
-@app.route('/products/<string:product_name>', methods=['PUT'])
-def editProduct(product_name):
-    productFound = [product for product in products if product ['name'] == product_name]
-    if (len(productFound) > 0):
-        productFound[0]['name'] = request.json['name']
-        productFound[0]['price'] = request.json['price']
-        productFound[0]['quantity'] = request.json['quantity']
-        return jsonify ({
-            "message": "Product Updated",
-            "product": productFound[0]
-        })
-    return jsonify({"message": "Product Not Found"})
-
-
-@app.route('/products/<string:product_name>', methods=['DELETE'])
-def deleteProduct(product_name):
-    productsFound =[product for product in products if product['name'] == product_name]
-    if (len(productsFound)> 0):
-        products.remove(productsFound[0])
-        return jsonify ({
-            "message": "Product Deleted",
-            "products": products
-        })
-    return jsonify ({"message": "Product Not found"})
-"""
 
 app.run (debug=True, port=4000)
