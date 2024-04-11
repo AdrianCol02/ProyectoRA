@@ -120,4 +120,4 @@ def not_found(error):
 def internal_server_error(error):
     return jsonify({'error': 'Internal server error'}), 500
 
-app.run (debug=True, port=4000)
+app.run (debug=True, host ="10.100.0.105", port=4000)
