@@ -1,15 +1,26 @@
 from flask import Flask, jsonify, request
-import os from datetime import datetime
+import os
+from datetime import datetime
 import paho.mqtt.client as mqtt
 
-# Configuración de MQTT
-MQTT_BROKER_HOST = 'localhost'  # Cambia esto por la dirección del broker MQTT
-MQTT_BROKER_PORT = 1883         # Puerto por defecto de MQTT
+"""""
+#La callback para cuando el cliente recibe una respuesta CONNACK del servidor
+def on_connect(client, userdata, flags, rc):
+    print("Conectado con mqtt "+str(rc))
 
-# Conexión al broker MQTT
-mqtt_client = mqtt.Client()
-mqtt_client.connect(MQTT_BROKER_HOST, MQTT_BROKER_PORT)
 
+#La callback para cuando se recibe un mensaje PUBLICAR desde el servidor.
+def on_publish(client, userdata, mid):
+    print("Mensaje publicado")
+
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_publish = on_publish
+
+client.connect("test.mosquitto.org", 1883, 60)
+
+#Publico un primer mensaje
+"""""
 app = Flask (__name__)
 
 
@@ -46,10 +57,9 @@ def addDatoGet():
 
     # Devolver una respuesta indicando que los datos se han guardado
     return f"Saving: {content} in: {logfile_name}"
-    return jsonify ({"message": "DatoGet recibido"})
 
 
-@app.route ('/post', methods=['POST'])
+@app.route('/post', methods=['POST'])
 def addDatoPost():
     # Obtener los datos del formulario enviado por POST
     id_nodo = request.form.get('id_nodo')
