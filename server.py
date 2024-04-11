@@ -7,7 +7,7 @@ import paho.mqtt.client as mqtt
 #La callback para cuando el cliente recibe una respuesta CONNACK del servidor
 def on_connect(client, userdata, flags, rc):
     print("Conectado con mqtt "+str(rc))
-
+Hola
 
 #La callback para cuando se recibe un mensaje PUBLICAR desde el servidor.
 def on_publish(client, userdata, mid):
