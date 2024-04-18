@@ -3,23 +3,25 @@ import os
 from datetime import datetime
 import paho.mqtt.client as mqtt
 
-"""""
-#La callback para cuando el cliente recibe una respuesta CONNACK del servidor
-def on_connect(client, userdata, flags, rc):
-    print("Conectado con mqtt "+str(rc))
+# The callback for when the client receives a CONNACK response from the server.
+def on_connect(client, userdata, flags, reason_code, properties):
+    print(f"Connected with result code {reason_code}")
+    # Subscribing in on_connect() means that if we lose the connection and
+    # reconnect then subscriptions will be renewed.
+    client.subscribe("$SYS/#")
 
-#La callback para cuando se recibe un mensaje PUBLICAR desde el servidor.
-def on_publish(client, userdata, mid):
-    print("Mensaje publicado")
+# The callback for when a PUBLISH message is received from the server.
+def on_message(client, userdata, msg):
+    print(msg.topic+" "+str(msg.payload))
 
-client = mqtt.Client()
-client.on_connect = on_connect
-client.on_publish = on_publish
+mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+mqttc.on_connect = on_connect
+mqttc.on_message = on_message
 
-client.connect("test.mosquitto.org", 1883, 60)
+mqttc.connect("10.100.0.105", 4000)
 
-#Publico un primer mensaje
-"""""
+mqttc.loop_start()
+
 app = Flask (__name__)
 
 
@@ -41,7 +43,12 @@ def addDatoGet():
     now = datetime.now()
 
     # Construir el nombre del archivo de registro
-    logfile_name = f"public/logs/{id_nodo}-{now.year}-{now.month}-{now.day}.csv"
+    logfile_name = f"get/{id_nodo}-{temperatura}-{humedad}-{co2}-{volatiles}-{now.year}-{now.month}-{now.day}.csv"
+
+    msg_info = mqttc.publish("/get", logfile_name, qos=1)
+
+    """""
+    
 
     # Comprobar si el archivo ya existe
     if os.path.exists(logfile_name):
@@ -56,7 +63,7 @@ def addDatoGet():
 
     # Devolver una respuesta indicando que los datos se han guardado
     return f"Saving: {content} in: {logfile_name}"
-
+"""
 
 @app.route('/post', methods=['POST'])
 def addDatoPost():
