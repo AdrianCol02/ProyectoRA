@@ -4,6 +4,8 @@ from datetime import datetime
 import paho.mqtt.client as mqtt
 
 # The callback for when the client receives a CONNACK response from the server.
+
+
 def on_connect(client, userdata, flags, reason_code, properties):
     print(f"Connected with result code {reason_code}")
     # Subscribing in on_connect() means that if we lose the connection and
@@ -14,9 +16,11 @@ def on_connect(client, userdata, flags, reason_code, properties):
 def on_message(mqttc, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
 
+
 mqttc = mqtt.Client()
 mqttc.on_connect = on_connect
 mqttc.on_message = on_message
+mqttc.username_pw_set("cliente", "")
 
 mqttc.connect("mqtt://10.100.0.105", 1883)
 
