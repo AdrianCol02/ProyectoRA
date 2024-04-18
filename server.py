@@ -47,23 +47,7 @@ def addDatoGet():
 
     msg_info = mqttc.publish("/get", logfile_name, qos=1)
 
-    """""
-    
 
-    # Comprobar si el archivo ya existe
-    if os.path.exists(logfile_name):
-        # Si el archivo existe, agregar la línea de datos
-        content = f"{id_nodo};{now.timestamp()};{temperatura};{humedad};{co2};{volatiles}\n"
-    else:
-        # Si el archivo no existe, agregar la línea de encabezado seguida de los datos
-        content = f"id_nodo;timestamp;temperatura;humedad;CO2;volatiles\n{id_nodo};{now.timestamp()};{temperatura};{humedad};{co2};{volatiles}\n"
-
-    # Agregar el contenido al archivo de registro
-    append_to_file(logfile_name, content)
-
-    # Devolver una respuesta indicando que los datos se han guardado
-    return f"Saving: {content} in: {logfile_name}"
-"""
 
 @app.route('/post', methods=['POST'])
 def addDatoPost():
