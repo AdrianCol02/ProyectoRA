@@ -14,12 +14,11 @@ def on_connect(client, userdata, flags, reason_code, properties):
 def on_message(mqttc, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
 
-mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+mqttc = mqtt.Client()
 mqttc.on_connect = on_connect
 mqttc.on_message = on_message
-mqttc.username_pw_set("cliente","")
 
-mqttc.connect("10.100.0.105", 1883)
+mqttc.connect("mqtt://10.100.0.105", 1883)
 
 mqttc.loop_start()
 
