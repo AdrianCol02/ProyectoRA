@@ -11,12 +11,13 @@ def on_connect(client, userdata, flags, reason_code, properties):
     client.subscribe("$SYS/#")
 
 # The callback for when a PUBLISH message is received from the server.
-def on_message(client, userdata, msg):
+def on_message(mqttc, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
 
 mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 mqttc.on_connect = on_connect
 mqttc.on_message = on_message
+mqttc.username_pw_set("cliente","")
 
 mqttc.connect("10.100.0.105", 1883)
 
