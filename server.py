@@ -17,7 +17,7 @@ def on_message(mqttc, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
 
 
-mqttc = mqtt.Client()
+mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1)
 mqttc.on_connect = on_connect
 mqttc.on_message = on_message
 
