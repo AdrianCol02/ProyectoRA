@@ -52,7 +52,7 @@ def addDatoGet():
 
     msg_info = mqttc.publish("/get", logfile_name, qos=1)
 
-
+    return f"Saving: {logfile_name}"
 
 @app.route('/post', methods=['POST'])
 def addDatoPost():
