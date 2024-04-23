@@ -17,7 +17,7 @@ def on_message(mqttc, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
 
 
-mqttc = mqtt.Client()
+mqttc = mqtt.Client(client_id="cliente")
 mqttc.on_connect = on_connect
 mqttc.on_message = on_message
 mqttc.username_pw_set("cliente", "")
