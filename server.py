@@ -20,7 +20,7 @@ def on_message(mqttc, userdata, msg):
 mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 mqttc.on_connect = on_connect
 mqttc.on_message = on_message
-mqttc.username_pw_set("Cliente", "")
+mqttc.username_pw_set("mosquitto", "mosquitto")
 
 
 
