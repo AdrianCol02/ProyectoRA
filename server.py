@@ -17,12 +17,12 @@ def on_message(mqttc, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
 
 
-mqttc = mqtt.Client(mqtt.CallbackAPIVersion.API_VESRION2)
+mqttc = mqtt.Client(mqtt.CallbackAPIVersion.API_VERSION2)
 mqttc.on_connect = on_connect
 mqttc.on_message = on_message
 
 
-mqttc.connect("localhost", 1883, 60)
+mqttc.connect("10.100.0.105", 1883, 60)
 
 mqttc.loop_start()
 
