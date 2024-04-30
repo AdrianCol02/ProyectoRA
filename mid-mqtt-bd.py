@@ -11,7 +11,7 @@ client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 client.connect("10.100.0.105", 1883, 60)
 
 #La callback para cuando el cliente recibe una respuesta CONNACK del servidor
-def on_connect(client, userdata, flags, rc):
+def on_connect(client, userdata, flags, rc, properties):
     print("Conectado con mqtt "+str(rc))
 
 client.on_connect = on_connect
