@@ -42,41 +42,34 @@ def addDatoGet():
     # Obtener la fecha y hora actual
     now = datetime.now()
 
+    data = {
+        'id_nodo': id_nodo,
+        'temperatura': temperatura,
+        'humedad': humedad,
+        'co2': co2,
+        'volatiles': volatiles,
+        'timestamp': now.strftime("%Y-%m-%d %H:%M:%S")
+    }
+
+    json_data = jsonify(data).get_data(as_text=True)
+
     # Construir el nombre del archivo de registro
-    logfile_name = f"get/{id_nodo}-{temperatura}-{humedad}-{co2}-{volatiles}-{now.year}-{now.month}-{now.day}.csv"
+    #logfile_name = f"get/{id_nodo}-{temperatura}-{humedad}-{co2}-{volatiles}-{now.year}-{now.month}-{now.day}"
 
-    msg_info = mqttc.publish("/get", logfile_name, qos=1)
+    msg_info = mqttc.publish("/get", json_data, qos=1)
 
-    return f"Saving: {logfile_name}"
+    return f"Saving: {id_nodo}"
 
 @app.route('/post', methods=['POST'])
 def addDatoPost():
-    # Obtener los datos del formulario enviado por POST
-    id_nodo = request.form.get('id_nodo')
-    temperatura = request.form.get('temperatura')
-    humedad = request.form.get('humedad')
-    co2 = request.form.get('co2')
-    volatiles = request.form.get('volatiles')
 
-    # Obtener la fecha y hora actual
-    now = datetime.now()
+    data = request.json
 
-    # Construir el nombre del archivo de registro
-    logfile_name = f"public/logs/{id_nodo}-{now.year}-{now.month}-{now.day}.csv"
+    msg_info = mqttc.publish("/get", data, qos=1)
 
-    # Comprobar si el archivo ya existe
-    if os.path.exists(logfile_name):
-        # Si el archivo existe, agregar la línea de datos
-        content = f"{id_nodo};{now.timestamp()};{temperatura};{humedad};{co2};{volatiles}\n"
-    else:
-        # Si el archivo no existe, agregar la línea de encabezado seguida de los datos
-        content = f"id_nodo;timestamp;temperatura;humedad;CO2;volatiles\n{id_nodo};{now.timestamp()};{temperatura};{humedad};{co2};{volatiles}\n"
-
-    # Agregar el contenido al archivo de registro
-    append_to_file(logfile_name, content)
 
     # Devolver una respuesta indicando que los datos se han guardado
-    return f"Saving: {content} in: {logfile_name}"
+    return f"Saving:"
 
 # Función para agregar contenido a un archivo
 def append_to_file(file_to_append, content):
