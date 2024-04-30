@@ -2,14 +2,14 @@ import paho.mqtt.client as mqtt
 import json
 from pymongo import MongoClient
 
-client_mongo = MongoClient('10.100.0.105', 27017)
+client_mongo = MongoClient('localhost', 27017)
 db = client_mongo['mongodb-105']  # Reemplaza 'mi_base_de_datos' con el nombre de tu base de datos
 nodos = db['nodos']  # Reemplaza 'mi_coleccion' con el nombre de tu colección
 
 
 client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
-client.connect("localhost", 1883, 60)
+client.connect("10.100.0.105", 1883, 60)
 
 #La callback para cuando el cliente recibe una respuesta CONNACK del servidor
 def on_connect(client, userdata, flags, rc, properties):
