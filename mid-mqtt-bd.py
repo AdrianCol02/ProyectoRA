@@ -24,7 +24,9 @@ def on_message(client, userdata, msg):
     print("Recibido: " + msg.topic+" "+str(msg.payload))
     try:
         # Decodificar el mensaje JSON
-        json_data = json.loads(msg.payload.decode("utf-8"))
+        #json_data = json.loads(msg.payload.decode("utf-8"))
+
+        json_data = {'edad':30,'nombre':"Pedro pedro pedro"}
 
         # Insertar el JSON en la colección de MongoDB
         collection.insert_one(json_data)
