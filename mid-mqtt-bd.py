@@ -4,11 +4,12 @@ from pymongo import MongoClient
 
 client_mongo = MongoClient('10.100.0.105', 27017)
 db = client_mongo['mongodb-105']  # Reemplaza 'mi_base_de_datos' con el nombre de tu base de datos
-collection = db['nodos']  # Reemplaza 'mi_coleccion' con el nombre de tu colección
+nodos = db['nodos']  # Reemplaza 'mi_coleccion' con el nombre de tu colección
+
 
 client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
-client.connect("10.100.0.105", 1883, 60)
+client.connect("localhost", 1883, 60)
 
 #La callback para cuando el cliente recibe una respuesta CONNACK del servidor
 def on_connect(client, userdata, flags, rc, properties):
@@ -24,12 +25,10 @@ def on_message(client, userdata, msg):
     print("Recibido: " + msg.topic+" "+str(msg.payload))
     try:
         # Decodificar el mensaje JSON
-        #json_data = json.loads(msg.payload.decode("utf-8"))
-
-        json_data = {'edad':30,'nombre':"Pedro pedro pedro"}
+        json_data = json.loads(msg.payload.decode("utf-8"))
 
         # Insertar el JSON en la colección de MongoDB
-        collection.insert_one(json_data)
+        nodos.insert_one(json_data)
 
         print("JSON insertado en MongoDB exitosamente.")
     except Exception as e:
