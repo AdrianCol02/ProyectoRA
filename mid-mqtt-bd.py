@@ -6,7 +6,7 @@ client_mongo = MongoClient('10.100.0.105', 27017)
 db = client_mongo['mongodb_105']  # Reemplaza 'mi_base_de_datos' con el nombre de tu base de datos
 collection = db['nodos']  # Reemplaza 'mi_coleccion' con el nombre de tu colección
 
-client = mqtt.Client(client_id="", clean_session=True, userdata=None)
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
 client.connect("10.100.0.105", 1883, 60)
 
