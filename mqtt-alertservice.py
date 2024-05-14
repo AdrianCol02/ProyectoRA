@@ -38,7 +38,6 @@ def enviar_alerta(destinatario, asunto, mensaje, remitente, password, servidor_s
     try:
         server = smtplib.SMTP_SSL(servidor_smtp, puerto_smtp)
         server.ehlo()
-        server.starttls()
         # Autenticarse con el servidor SMTP
         server.login(remitente, password)
         # Enviar el correo electrónico
