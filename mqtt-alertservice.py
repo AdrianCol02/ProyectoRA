@@ -1,6 +1,8 @@
 import paho.mqtt.client as mqtt
 import smtplib
 from email.mime.text import MIMEText
+import json
+
 
 client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
@@ -56,9 +58,20 @@ enviar_alerta(destinatario, asunto, mensajePrueba, remitente, password, servidor
 
 def on_message(client, userdata, msg):
     print("Recibido: " + msg.topic+" "+str(msg.payload))
-    ##
-    mensaje ="Ha llegado el dato:\n" + str(msg.payload)
-    enviar_alerta(destinatario, asunto, mensaje, remitente, password, servidor_smtp, puerto_smtp)
+
+
+    datos = json.load(msg.payload)
+
+    nodo = datos['id_nodo']
+    temp = datos['temperatura']
+    humedad = datos['humedad']
+    co2 = datos['co2']
+    volatiles = datos['volatiles']
+    timestamp = datos['timestamp']
+
+    if(temp > 29):
+        mensaje = "Ha llegado el dato:\n" + datos + '\nLa temperatura es demasiado alta. Se recomienda bajar a 20.'
+        enviar_alerta(destinatario, asunto, mensaje, remitente, password, servidor_smtp, puerto_smtp)
 
 
 client.on_message = on_message
