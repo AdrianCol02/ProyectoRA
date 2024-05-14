@@ -24,7 +24,7 @@ mensajePrueba = 'Este es un mensaje de alerta importante.'
 
 # Detalles del servidor SMTP de Gmail
 servidor_smtp = 'smtp.gmail.com'
-puerto_smtp = 465  # El puerto para TLS
+puerto_smtp = 587  # El puerto para TLS
 
 
 def enviar_alerta(destinatario, asunto, mensaje, remitente, password, servidor_smtp, puerto_smtp):
