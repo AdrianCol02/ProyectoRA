@@ -67,8 +67,7 @@ def on_message(client, userdata, msg):
 
 
     if(temp > 29):
-        #mensaje = "Ha llegado el dato:\n" + datos_formateados + '\nLa temperatura es demasiado alta. Se recomienda bajar a 20.'
-        mensaje = f"<p>Ha llegado el dato:</p><pre>{datos_formateados}</pre><p style='color:red;'>La temperatura es demasiado alta. Se recomienda bajar a <strong>20</strong>.</p>"
+        mensaje = "Ha llegado el dato:\n" + datos_formateados + '\nLa temperatura es demasiado alta. Se recomienda bajar a 20.'
         enviar_alerta(destinatario, asunto, mensaje, remitente, password, servidor_smtp, puerto_smtp)
 
 
