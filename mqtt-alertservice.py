@@ -18,7 +18,7 @@ client.subscribe("/post")
 # Detalles de configuración del correo
 remitente = 'enviaralerta@gmail.com'
 password = 'lmoslagycfvyhhiq'
-destinatario = 'recibiralertas@gmail.com'
+destinatario = 'alertasrecibir@gmail.com'
 asunto = 'Alerta importante'
 mensajePrueba = 'Este es un mensaje de alerta importante.'
 
@@ -53,10 +53,11 @@ def enviar_alerta(destinatario, asunto, mensaje, remitente, password, servidor_s
 # Llamada a la función para enviar el correo
 enviar_alerta(destinatario, asunto, mensajePrueba, remitente, password, servidor_smtp, puerto_smtp)
 
+
 def on_message(client, userdata, msg):
     print("Recibido: " + msg.topic+" "+str(msg.payload))
     ##
-    mensaje ="ha llegado un dato"
+    mensaje ="Ha llegado el dato:\n" + str(msg.payload)
     enviar_alerta(destinatario, asunto, mensaje, remitente, password, servidor_smtp, puerto_smtp)
 
 
