@@ -59,8 +59,7 @@ enviar_alerta(destinatario, asunto, mensajePrueba, remitente, password, servidor
 def on_message(client, userdata, msg):
     print("Recibido: " + msg.topic+" "+str(msg.payload))
 
-
-    datos = json.load(msg.payload)
+    datos = json.loads(msg.payload.decode())
 
     nodo = datos['id_nodo']
     temp = datos['temperatura']
