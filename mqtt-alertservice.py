@@ -17,14 +17,15 @@ client.subscribe("/post")
 
 # Detalles de configuración del correo
 remitente = 'enviaralerta@gmail.com'
-password = 'Enviaralerta123'
+password = 'wwwn bugi prdw oele'
 destinatario = 'recibiralertas@gmail.com'
 asunto = 'Alerta importante'
 mensajePrueba = 'Este es un mensaje de alerta importante.'
 
 # Detalles del servidor SMTP de Gmail
 servidor_smtp = 'smtp.gmail.com'
-puerto_smtp = 587  # El puerto para TLS
+puerto_smtp = 465  # El puerto para TLS
+
 
 def enviar_alerta(destinatario, asunto, mensaje, remitente, password, servidor_smtp, puerto_smtp):
     # Crear mensaje MIME
@@ -36,7 +37,7 @@ def enviar_alerta(destinatario, asunto, mensaje, remitente, password, servidor_s
     # Iniciar conexión SMTP
     try:
         server = smtplib.SMTP(servidor_smtp, puerto_smtp)
-        server.starttls()
+        server.ehlo()
         # Autenticarse con el servidor SMTP
         server.login(remitente, password)
         # Enviar el correo electrónico
