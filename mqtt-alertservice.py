@@ -56,6 +56,7 @@ def on_message(client, userdata, msg):
     print("Recibido: " + msg.topic+" "+str(msg.payload))
 
     datos = json.loads(msg.payload.decode())
+    datos_formateados = json.dumps(datos, indent=4)
 
     nodo = datos['id_nodo']
     temp = float(datos['temperatura'])
@@ -64,8 +65,9 @@ def on_message(client, userdata, msg):
     volatiles = float(datos['volatiles'])
     timestamp = datos['timestamp']
 
+
     if(temp > 29):
-        mensaje = "Ha llegado el dato:\n" + datos + '\nLa temperatura es demasiado alta. Se recomienda bajar a 20.'
+        mensaje = "Ha llegado el dato:\n" + datos_formateados + '\nLa temperatura es demasiado alta. Se recomienda bajar a 20.'
         enviar_alerta(destinatario, asunto, mensaje, remitente, password, servidor_smtp, puerto_smtp)
 
 
