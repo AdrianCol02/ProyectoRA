@@ -37,7 +37,7 @@ def enviar_alerta(destinatario, asunto, mensaje, remitente, password, servidor_s
     # Iniciar conexión SMTP
     try:
         server = smtplib.SMTP(servidor_smtp, puerto_smtp)
-        server.connect(servidor_smtp,465)
+        server.connect(servidor_smtp,587)
         server.ehlo()
         server.starttls()
         server.ehlo()
