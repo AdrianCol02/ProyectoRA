@@ -52,20 +52,16 @@ def enviar_alerta(destinatario, asunto, mensaje, remitente, password, servidor_s
         server.quit()
 
 
-# Llamada a la función para enviar el correo
-enviar_alerta(destinatario, asunto, mensajePrueba, remitente, password, servidor_smtp, puerto_smtp)
-
-
 def on_message(client, userdata, msg):
     print("Recibido: " + msg.topic+" "+str(msg.payload))
 
     datos = json.loads(msg.payload.decode())
 
     nodo = datos['id_nodo']
-    temp = datos['temperatura']
-    humedad = datos['humedad']
-    co2 = datos['co2']
-    volatiles = datos['volatiles']
+    temp = float(datos['temperatura'])
+    humedad = float(datos['humedad'])
+    co2 = float(datos['co2'])
+    volatiles = float(datos['volatiles'])
     timestamp = datos['timestamp']
 
     if(temp > 29):
