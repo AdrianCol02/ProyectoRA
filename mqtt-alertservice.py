@@ -17,7 +17,7 @@ client.subscribe("/post")
 
 # Detalles de configuración del correo
 remitente = 'enviaralerta@gmail.com'
-password = 'wwwnbugiprdwoele'
+password = 'lmoslagycfvyhhiq'
 destinatario = 'recibiralertas@gmail.com'
 asunto = 'Alerta importante'
 mensajePrueba = 'Este es un mensaje de alerta importante.'
