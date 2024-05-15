@@ -21,8 +21,7 @@ client.subscribe("/post")
 remitente = 'enviaralerta@gmail.com'
 password = 'lmoslagycfvyhhiq'
 destinatario = 'alertarecibir@gmail.com'
-asunto = 'Alerta importante'
-mensajePrueba = 'Este es un mensaje de alerta importante.'
+
 
 # Detalles del servidor SMTP de Gmail
 servidor_smtp = 'smtp.gmail.com'
@@ -65,13 +64,31 @@ def on_message(client, userdata, msg):
     volatiles = float(datos['volatiles'])
     timestamp = datos['timestamp']
 
-
-    if(temp > 29):
-        #mensaje = "Ha llegado el dato:\n" + datos_formateados + '\nLa temperatura es demasiado alta. Se recomienda bajar a 20.'
-        mensaje = f"Temperatura actual: {temp}°C\n" \
+    if temp > 40:
+        # mensaje = "Ha llegado el dato:\n" + datos_formateados + '\nLa temperatura es demasiado alta.
+        # Se recomienda bajar a 20.'
+        asunto = 'Alerta temperatura'
+        mensaje = f"Temperatura actual: {temp}°C a {timestamp}\n" \
                   f"\nLa temperatura es demasiado alta. Se recomienda bajar a 20°C."
         enviar_alerta(destinatario, asunto, mensaje, remitente, password, servidor_smtp, puerto_smtp)
 
+    if humedad < 5:
+        asunto = 'Alerta humedad baja'
+        mensaje = f"Humedad actual: {humedad}%\n" \
+                  f"\nLa humedad es demasiado baja. Se recomienda mantener estable entre 5% y 15%."
+        enviar_alerta(destinatario, asunto, mensaje, remitente, password, servidor_smtp, puerto_smtp)
+
+    elif humedad > 15:
+        asunto = 'Alerta humedad alta'
+        mensaje = f"Humedad actual: {humedad}%\n" \
+                  f"\nLa humedad es demasiado alta. Se recomienda mantener estable entre 5% y 15%."
+        enviar_alerta(destinatario, asunto, mensaje, remitente, password, servidor_smtp, puerto_smtp)
+
+    if co2 > 100:
+        asunto = 'Alerta Co2'
+        mensaje = f"Co2 actual: {co2}%\n" \
+                  f"\nEl Co2 es demasiado alto. Se recomienda mantener estable por debajo de 100."
+        enviar_alerta(destinatario, asunto, mensaje, remitente, password, servidor_smtp, puerto_smtp)
 
 client.on_message = on_message
 
