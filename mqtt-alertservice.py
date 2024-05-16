@@ -20,7 +20,7 @@ client.subscribe("/nodos")
 # Detalles de configuración del correo
 remitente = 'enviaralerta@gmail.com'
 password = 'lmoslagycfvyhhiq'
-destinatario = 'adrian.colomer@alumnos.upm.es'
+destinatario = 'c.ocana@alumnos.upm.es'
 
 
 # Detalles del servidor SMTP de Gmail
