@@ -30,7 +30,7 @@ def ping():
     return jsonify({"message": "HOLA!"})
 
 
-@app.route('/get', methods=['GET'])
+@app.route('/', methods=['GET'])
 def addDatoGet():
     # Obtener los parámetros de la URL
     id_nodo = request.args.get('id_nodo')
@@ -56,16 +56,16 @@ def addDatoGet():
     # Construir el nombre del archivo de registro
     #logfile_name = f"get/{id_nodo}-{temperatura}-{humedad}-{co2}-{volatiles}-{now.year}-{now.month}-{now.day}"
 
-    msg_info = mqttc.publish("/get", json_data, qos=1)
+    msg_info = mqttc.publish("/nodos", json_data, qos=1)
 
     return f"Saving: {id_nodo}"
 
-@app.route('/post', methods=['POST'])
+@app.route('/', methods=['POST'])
 def addDatoPost():
 
     data = request.json
 
-    msg_info = mqttc.publish("/get", data, qos=1)
+    msg_info = mqttc.publish("/nodos", data, qos=1)
 
 
     # Devolver una respuesta indicando que los datos se han guardado

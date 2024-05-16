@@ -14,8 +14,8 @@ def on_connect(client, userdata, flags, rc, properties):
 
 client.on_connect = on_connect
 
-client.subscribe("/get")
-client.subscribe("/post")
+client.subscribe("/nodos")
+
 
 # Detalles de configuración del correo
 remitente = 'enviaralerta@gmail.com'
@@ -77,7 +77,6 @@ def on_message(client, userdata, msg):
         mensaje = f"Humedad actual: {humedad}%\n" \
                   f"\nLa humedad es demasiado baja. Se recomienda mantener estable entre 5% y 15%."
         enviar_alerta(destinatario, asunto, mensaje, remitente, password, servidor_smtp, puerto_smtp)
-
     elif humedad > 15:
         asunto = 'Alerta humedad alta'
         mensaje = f"Humedad actual: {humedad}%\n" \

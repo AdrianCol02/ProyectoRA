@@ -17,8 +17,7 @@ def on_connect(client, userdata, flags, rc, properties):
 
 client.on_connect = on_connect
 
-client.subscribe("/get")
-client.subscribe("/post")
+client.subscribe("/nodos")
 
 #La callback para cuando se recibe un mensaje PUBLICAR desde el servidor.
 def on_message(client, userdata, msg):
