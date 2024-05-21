@@ -3,8 +3,8 @@ import json
 from pymongo import MongoClient
 
 client_mongo = MongoClient('localhost', 27017)
-db = client_mongo['mongodb-105']  # Reemplaza 'mi_base_de_datos' con el nombre de tu base de datos
-nodos = db['nodos']  # Reemplaza 'mi_coleccion' con el nombre de tu colección
+db = client_mongo['test']
+nodos = db['nodos']
 
 
 client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
