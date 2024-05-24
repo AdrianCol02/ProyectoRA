@@ -17,6 +17,7 @@ lock = Lock()
 
 # Lista negra de IPs
 blacklist = set()
+blacklist.add("10.0.4.32")
 
 # Verifica si hay suficientes tokens en el cubo
 def allow_request():
@@ -75,15 +76,26 @@ def handle_post():
     response = requests.post('http://localhost:4002/', json=data)
     return response.content, response.status_code
 
-@app.route('/blacklist', methods=['POST'])
+
+@app.route('/blacklistin', methods=['GET'])
 def add_to_blacklist():
-    data = request.json
-    ip = data.get('ip')
-    if ip:
-        blacklist.add(ip)
-        return jsonify({"message": f"IP {ip} added to blacklist"}), 200
+    ip = request.args.get('ip')
+    if ip in blacklist:
+        return jsonify({"error": f"La IP {ip} ya está en la blacklist"}), 400
     else:
-        return jsonify({"error": "No IP provided"}), 400
+        blacklist.add(ip)
+        return jsonify({"mensaje": f"La IP {ip} fue añadida correctamente"}), 200
+
+
+@app.route('/blacklistout', methods=['GET'])
+def add_to_blacklist():
+    ip = request.args.get('ip')
+    if ip in blacklist:
+        blacklist.remove(ip)
+        return jsonify({"message": f"IP {ip} eliminada correctamente"}), 200
+    else:
+        return jsonify({"error": f"La IP {ip} no está en la blacklist"}), 400
+
 
 # Ejecutar la aplicación Flask
 if __name__ == '__main__':
