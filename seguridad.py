@@ -88,7 +88,7 @@ def add_to_blacklist():
 
 
 @app.route('/blacklistout', methods=['GET'])
-def add_to_blacklist():
+def remove_from_blacklist():
     ip = request.args.get('ip')
     if ip in blacklist:
         blacklist.remove(ip)
